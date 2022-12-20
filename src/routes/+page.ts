@@ -1,7 +1,7 @@
 import type { Todo } from "$lib/todo";
 import type { PageLoad } from "./$types";
 
-export const ssr = false;
+
 
 /** @type {import('./$types').PageLoad} */
 export const load: PageLoad = async ({ fetch }) => {
