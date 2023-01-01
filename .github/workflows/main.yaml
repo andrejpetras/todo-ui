@@ -17,14 +17,15 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.CI_PAT }}
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - name: Project version
         id: project_version
         uses: lorislab/samo-action@v1.0.0
