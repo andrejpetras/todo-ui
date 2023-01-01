@@ -21,7 +21,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6
       - name: Project version
         id: project_version
         uses: lorislab/samo-action@v1.0.0
@@ -36,5 +39,6 @@ jobs:
       - name: Build project
         run: |
           yq -iP '.version="${{ steps.project_version.outputs.stdout }}"' package.json -o json
-          npm ci
+          pnpm install --frozen-lockfile
+          pnpm build
 
