@@ -26,3 +26,5 @@ COPY build $DIR_HTML
 # run
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
+
+USER 1001
