@@ -17,4 +17,3 @@ spec:
                 name: {{ .Release.Name }}-{{ .Chart.Name }}
                 port:
                   number: {{ .Values.service.port }}
-                  
