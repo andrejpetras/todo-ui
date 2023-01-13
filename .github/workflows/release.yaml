@@ -45,6 +45,7 @@ jobs:
         run: |
           yq -iP '.version="${{ github.ref_name }}"' helm/Chart.yaml
           yq -iP '.app.image.tag="${{ github.ref_name }}"' helm/values.yaml
+          yq -iP '.app.version="${{ github.ref_name }}"' helm/values.yaml
           helm dependency update helm
           helm package helm
           PKG_NAME=`ls *.tgz`
