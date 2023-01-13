@@ -44,7 +44,8 @@ jobs:
       - name: Build helm
         run: |
           yq -iP '.version="${{ github.ref_name }}"' helm/Chart.yaml
-          yq -iP '.image.tag="${{ github.ref_name }}"' helm/values.yaml
+          yq -iP '.app.image.tag="${{ github.ref_name }}"' helm/values.yaml
+          helm dependency update helm
           helm package helm
           PKG_NAME=`ls *.tgz`
           helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts

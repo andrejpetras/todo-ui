@@ -50,7 +50,9 @@ jobs:
       - name: Build helm
         run: |
           yq -iP '.version="${{ steps.project_version.outputs.stdout }}"' helm/Chart.yaml
-          yq -iP '.image.tag="${{ steps.project_version.outputs.stdout }}"' helm/values.yaml
+          yq -iP '.app.image.tag="${{ steps.project_version.outputs.stdout }}"' helm/values.yaml
+          yq -iP '.app.version="${{ github.ref_name }}"' helm/values.yaml
+          helm dependency update helm
           helm package helm
           PKG_NAME=`ls *.tgz`
           helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
