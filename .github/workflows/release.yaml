@@ -15,12 +15,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          token: ${{ secrets.CI_PAT }}
+      - uses: lorislab/install-samo-action@v1             
       - name: Release docker image
-        uses: lorislab/samo-action@v1
-        with:
-          args: samo project docker release -v debug
+        run: samo project docker release -v debug
       - name: Release helm
-        uses: lorislab/samo-action@v1
-        with:
-          args: samo project helm release -v debug          
+        run: samo project helm release -v debug          
