@@ -20,4 +20,4 @@ jobs:
       - name: Release docker image
         run: samo project docker release -v debug
       - name: Release helm
-        run: samo project helm release -v debug --helm-registry oci://${{ env.SAMO_DOCKER_REGISTRY }}/${{ env.SAMO_DOCKER_GROUP }}/charts -v debug          
+        run: samo project helm release -v debug --helm-registry oci://${{ env.SAMO_DOCKER_REGISTRY }}/${{ github.repository_owner }}/charts -v debug          
