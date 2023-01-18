@@ -17,10 +17,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.CI_PAT }}
       - name: Release docker image
-        uses: lorislab/samo-action@v1.1.0
+        uses: lorislab/samo-action@v1
         with:
           args: samo project docker release -v debug
       - name: Release helm
-        uses: lorislab/samo-action@v1.1.0
+        uses: lorislab/samo-action@v1
         with:
           args: samo project helm release -v debug          

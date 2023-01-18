@@ -28,7 +28,7 @@ jobs:
           cache: 'pnpm'
       - name: Project version
         id: project_version
-        uses: lorislab/samo-action@v1.1.0
+        uses: lorislab/samo-action@v1
         with:
           args: samo project version
       - name: Login to GitHub Container Registry
@@ -43,15 +43,15 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
       - name: Build docker image
-        uses: lorislab/samo-action@v1.1.0
+        uses: lorislab/samo-action@v1
         with:
           args: samo project docker build --docker-build-push -v debug
       - name: Build helm
-        uses: lorislab/samo-action@v1.1.0
+        uses: lorislab/samo-action@v1
         with:
           args: samo project helm build -v debug
       - name: Build helm
-        uses: lorislab/samo-action@v1.1.0
+        uses: lorislab/samo-action@v1
         with:
           args: samo project helm push --helm-registry oci://${{ env.SAMO_DOCKER_REGISTRY }}/${{ github.repository_owner }}/charts -v debug
 
