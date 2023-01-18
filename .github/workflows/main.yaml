@@ -7,6 +7,7 @@ on:
 
 env:
   SAMO_DOCKER_REGISTRY: ghcr.io
+  SAMO_DOCKER_GROUP: ${{ github.repository_owner }}
 
 jobs:
   build:
@@ -44,6 +45,6 @@ jobs:
       - name: Build helm
         run: samo project helm build -v debug
       - name: Push helm
-        run: samo project helm push --helm-registry oci://${{ env.SAMO_DOCKER_REGISTRY }}/${{ github.repository_owner }}/charts -v debug
+        run: samo project helm push --helm-registry oci://${{ env.SAMO_DOCKER_REGISTRY }}/${{ env.SAMO_DOCKER_GROUP }}/charts -v debug
 
 
