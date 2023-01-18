@@ -7,6 +7,7 @@ on:
 env:
   SAMO_DOCKER_REGISTRY: ghcr.io
   SAMO_DOCKER_GROUP: ${{ github.repository_owner }}/
+  SAMO_HELM_REGISTRY: oci://ghcr.io/${{ github.repository_owner }}/charts
 
 jobs:
   build:
@@ -20,4 +21,4 @@ jobs:
       - name: Release docker image
         run: samo project docker release -v debug
       - name: Release helm
-        run: samo project helm release -v debug --helm-registry oci://${{ env.SAMO_DOCKER_REGISTRY }}/${{ github.repository_owner }}/charts -v debug          
+        run: samo project helm release -v debug    
