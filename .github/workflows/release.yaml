@@ -5,8 +5,7 @@ on:
     - '**'
 
 env:
-  REGISTRY: ghcr.io
-  NAME: todo-ui
+  SAMO_DOCKER_REGISTRY: ghcr.io
 
 jobs:
   build:
@@ -17,36 +16,11 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.CI_PAT }}
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
+      - name: Release docker image
+        uses: lorislab/samo-action@v1.1.0
         with:
-          version: 6
-      - name: Use Node.js
-        uses: actions/setup-node@v3
+          args: samo project docker release -v debug
+      - name: Release helm
+        uses: lorislab/samo-action@v1.1.0
         with:
-          node-version: 16
-          cache: 'pnpm'
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build project
-        run: |
-          yq -iP '.version="${{ github.ref_name }}"' package.json -o json
-          pnpm install --frozen-lockfile
-          pnpm build
-      - name: Build docker image
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.NAME }}:${{ github.ref_name }} -f docker/Dockerfile .
-          docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.NAME }}:${{ github.ref_name }}
-      - name: Build helm
-        run: |
-          yq -iP '.version="${{ github.ref_name }}"' helm/Chart.yaml
-          yq -iP '.app.image.tag="${{ github.ref_name }}"' helm/values.yaml
-          yq -iP '.app.version="${{ github.ref_name }}"' helm/values.yaml
-          helm dependency update helm
-          helm package helm
-          PKG_NAME=`ls *.tgz`
-          helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
+          args: samo project helm release -v debug          

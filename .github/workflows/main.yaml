@@ -6,8 +6,7 @@ on:
   pull_request:
 
 env:
-  REGISTRY: ghcr.io
-  NAME: todo-ui
+  SAMO_DOCKER_REGISTRY: ghcr.io
 
 jobs:
   build:
@@ -29,13 +28,13 @@ jobs:
           cache: 'pnpm'
       - name: Project version
         id: project_version
-        uses: lorislab/samo-action@v1.0.0
+        uses: lorislab/samo-action@v1.1.0
         with:
           args: samo project version
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{ env.SAMO_DOCKER_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build project
@@ -44,16 +43,16 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
       - name: Build docker image
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.NAME }}:${{ steps.project_version.outputs.stdout }} -f docker/Dockerfile .
-          docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.NAME }}:${{ steps.project_version.outputs.stdout }}
+        uses: lorislab/samo-action@v1.1.0
+        with:
+          args: samo project docker build --docker-build-push -v debug
       - name: Build helm
-        run: |
-          yq -iP '.version="${{ steps.project_version.outputs.stdout }}"' helm/Chart.yaml
-          yq -iP '.app.image.tag="${{ steps.project_version.outputs.stdout }}"' helm/values.yaml
-          yq -iP '.app.version="${{ github.ref_name }}"' helm/values.yaml
-          helm dependency update helm
-          helm package helm
-          PKG_NAME=`ls *.tgz`
-          helm push ${PKG_NAME} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
+        uses: lorislab/samo-action@v1.1.0
+        with:
+          args: samo project helm build -v debug
+      - name: Build helm
+        uses: lorislab/samo-action@v1.1.0
+        with:
+          args: samo project helm push --helm-registry oci://${{ env.SAMO_DOCKER_REGISTRY }}/${{ github.repository_owner }}/charts -v debug
+
 

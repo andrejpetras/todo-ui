@@ -1,0 +1,5 @@
+helm-source-dir: helm
+helm-source-copy: true
+helm-values-template-list: "app.image.tag={{ .Version }},app.version={{ .Version }}"
+docker-group: todo-ui/
+docker-file: docker/Dockerfile
