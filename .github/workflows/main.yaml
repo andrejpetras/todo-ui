@@ -41,7 +41,9 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
       - name: Build docker image
-        run: samo project docker build --docker-build-push -v debug
+        run: samo project docker build -v debug
+      - name: Push docker image
+        run: samo project docker push -v debug        
       - name: Build helm
         run: samo project helm build -v debug
       - name: Push helm
